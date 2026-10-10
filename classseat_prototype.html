@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ClassSeat | ระบบจองที่นั่ง</title>
+<style>
+:root{--ink:#172033;--muted:#68758a;--line:#e1e7ef;--bg:#f4f7fb;--blue:#315de8;--green:#dff5e7;--reserved:#dce6ff;--red:#fde7e7}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:#fff;border-bottom:1px solid var(--line);padding:18px max(16px,calc((100vw - 1100px)/2));display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:0;z-index:5}
+.brand{font-weight:800;font-size:22px;letter-spacing:-.5px}.sub{font-size:12px;color:var(--muted);margin-top:3px}
+button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:11px;padding:11px 14px;font-weight:650}.primary{background:var(--blue);color:white}.soft{background:#edf1ff;color:#2346bf}.ghost{background:#f0f3f8;color:#263246}
+main{max-width:1100px;margin:22px auto;padding:0 16px 40px}.intro{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:18px}.intro h1{font-size:clamp(23px,4vw,32px);margin:0 0 5px}.intro p{margin:0;color:var(--muted);font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}.stat{background:white;border:1px solid var(--line);border-radius:16px;padding:14px}.stat span{display:block;color:var(--muted);font-size:12px}.stat strong{display:block;font-size:24px;margin-top:5px}
+.panel{background:white;border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 6px 24px #1d35570a}.panelhead{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}.panelhead h2{font-size:17px;margin:0}.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted)}.key{display:inline-flex;align-items:center;gap:6px}.dot{width:12px;height:12px;border-radius:4px;border:1px solid #cad3df}.dot.free{background:var(--green)}.dot.busy{background:var(--reserved)}.dot.selected{background:var(--red)}
+.room{background:#f8fafc;border:1px solid #e1e7ef;border-radius:16px;padding:14px;overflow-x:auto}.front{min-width:560px;display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:18px}.board{width:48%;border:1px solid #8ddbe6;background:#dff8fb;color:#155e6b;text-align:center;border-radius:8px;padding:8px;font-size:13px;font-weight:750}.teacher{align-self:flex-end;margin-right:12%;background:#16a34a;color:white;padding:10px 18px;border-radius:8px;font-weight:700;font-size:13px}
+.seating{min-width:560px;display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:10px 8px;align-items:stretch}.seat{min-height:54px;background:var(--green);border:1px solid #b8e4c7;color:#175c36;border-radius:8px;padding:5px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0}.seat b{font-size:12px}.seat small{font-size:10px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.seat.reserved{background:var(--reserved);border-color:#b6c8ff;color:#2346a8}.seat.chosen{background:var(--red);border:2px solid #e66a6a;color:#a22c2c}.seat:disabled{cursor:not-allowed;opacity:1}.side-label{writing-mode:vertical-rl;align-self:stretch;display:flex;justify-content:center;align-items:center;border-radius:7px;padding:6px;background:#cffafe;color:#155e75;font-size:11px;font-weight:700;min-height:80px}.door{background:#202631;color:white;padding:8px 10px;border-radius:7px;font-size:11px;font-weight:700;writing-mode:vertical-rl;align-self:start}.bin{background:#ef4444;color:white;border-radius:7px;padding:8px 10px;font-size:11px;font-weight:700;align-self:end}
+.room-bottom{display:flex;justify-content:space-between;align-items:end;gap:14px;margin-top:14px;min-width:560px}.floor-note{font-size:11px;color:#718096}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field label{font-size:13px;font-weight:650}.field input,.field select{width:100%;border:1px solid #d8e0eb;border-radius:10px;padding:12px;background:white;color:var(--ink)}.section{margin-top:16px}.section h2{font-size:17px;margin:0 0 12px}.hint{font-size:12px;color:var(--muted);line-height:1.6}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.notice{margin-top:12px;padding:11px 12px;background:#f0f5ff;border:1px solid #dce6ff;border-radius:11px;color:#2845a0;font-size:13px;line-height:1.5}.admin{display:none}.admin.show{display:block}.screen{max-width:520px;margin:42px auto;padding:0 16px 40px}.hidden{display:none!important}.login-card{background:white;border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 12px 35px #1d355710}.login-card h1{margin:0 0 8px;font-size:26px}.login-card p{color:var(--muted);font-size:14px;line-height:1.6}.status{padding:12px;border-radius:12px;background:#f0f5ff;color:#2845a0;font-size:13px;line-height:1.5;margin-top:14px}.bookings{width:100%;border-collapse:collapse;font-size:13px}.bookings th,.bookings td{padding:10px 8px;text-align:left;border-bottom:1px solid var(--line)}.bookings th{color:var(--muted);font-weight:600}.empty{padding:18px;text-align:center;color:var(--muted);font-size:13px}
+footer{text-align:center;padding:20px;color:var(--muted);font-size:11px}
+@media(min-width:760px){.lower{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;align-items:start}.section{margin-top:0}.panel{padding:20px}}
+@media(max-width:520px){header{padding:14px 16px}.brand{font-size:20px}main{margin-top:18px}.intro{align-items:start;flex-direction:column}.stats{gap:7px}.stat{padding:11px}.stat strong{font-size:21px}.panel{padding:12px}.formgrid{grid-template-columns:1fr}.panelhead{align-items:start;flex-direction:column}.room{padding:10px}}
+</style>
+</head>
+<body>
+<header>
+ <div><div class="brand">ClassSeat</div><div class="sub">ระบบจองที่นั่งห้องเรียน</div></div>
+ <button class="ghost" id="adminToggle" type="button" onclick="document.getElementById(&quot;adminPanel&quot;).classList.toggle(&quot;show&quot;)">เข้าสู่ระบบแอดมิน</button>
+</header>
+<section class="screen" id="studentLoginScreen">
+ <div class="login-card">
+  <h1>เข้าสู่ระบบ ClassSeat</h1><p>กรอกชื่อจริงและรหัสกลางที่แอดมินกำหนด เพื่อเข้าสู่หน้าผังที่นั่ง</p>
+  <div class="field"><label for="loginStudentName">ชื่อจริง</label><input id="loginStudentName" maxlength="80" placeholder="กรอกชื่อจริง"></div>
+  <div class="field" style="margin-top:12px"><label for="loginSharedCode">รหัสกลาง</label><input id="loginSharedCode" type="password" placeholder="กรอกรหัสกลาง"></div>
+  <div class="actions"><button class="primary" id="studentLoginBtn" style="width:100%">เข้าสู่ระบบ</button></div>
+  <div class="status" id="loginStatus">ระบบต้นแบบ: รอการเข้าสู่ระบบ</div>
+ </div>
+</section>
+  <section class="panel section admin" id="adminPanel">
+   <h2>จัดการระบบแอดมิน</h2>
+   <div id="adminLogin">
+    <div class="formgrid">
+     <div class="field"><label for="adminName">ชื่อแอดมิน</label><input id="adminName" placeholder="ชื่อแอดมิน"></div>
+     <div class="field"><label for="adminPass">รหัสผ่านแอดมิน</label><input id="adminPass" type="password" placeholder="รหัสผ่าน"></div>
+    </div>
+    <div class="actions"><button class="primary" id="loginBtn" type="button" onclick="adminLogin()">เข้าสู่ระบบ</button></div>
+    <div class="status" id="adminLoginStatus">พร้อมเข้าสู่ระบบแอดมิน</div>
+    <div class="notice">ข้อมูลเข้าสู่ระบบแอดมินสำหรับทดลอง<br><strong>ชื่อแอดมิน:</strong> admin<br><strong>รหัสผ่าน:</strong> admin123</div>
+    <p class="hint">เป็นบัญชีทดลองของต้นแบบนี้เท่านั้น ยังไม่มีระบบยืนยันตัวตนฝั่งเซิร์ฟเวอร์ โปรดอย่าใช้รหัสจริง</p>
+   </div>
+   <div id="adminTools" style="display:none">
+    <div class="field"><label for="newCode">ตั้งรหัสกลางสำหรับนักเรียน</label><input id="newCode" type="password" placeholder="ตั้งรหัสกลาง"></div>
+    <div class="section"><h3 style="font-size:14px;margin:18px 0 8px">ช่วงเวลาอนุญาตให้เข้าสู่ระบบ</h3>
+     <div class="formgrid">
+      <div class="field"><label for="accessStart">วันเวลาเปิดระบบ</label><input id="accessStart" type="datetime-local"></div>
+      <div class="field"><label for="accessEnd">วันเวลาปิดระบบ</label><input id="accessEnd" type="datetime-local"></div>
+     </div>
+     <p class="hint">เมื่อพ้นเวลาสิ้นสุด นักเรียนใหม่จะเข้าสู่ระบบไม่ได้และจะไม่เห็นผังโต๊ะ ผู้ที่เข้าสู่ระบบอยู่แล้วสามารถใช้งานต่อจนกว่าจะออกจากระบบ</p>
+    </div>
+    <div class="actions"><button class="primary" id="saveCode">บันทึกรหัสกลาง</button><button class="primary" id="saveAccessWindow">บันทึกช่วงเวลา</button><button class="ghost" id="logoutBtn">ออกจากระบบแอดมิน</button></div>
+    <div class="notice" id="accessWindowStatus">ยังไม่ได้ตั้งช่วงเวลาเฉพาะ</div>
+    <h3 style="font-size:14px;margin:20px 0 8px">รายการจอง</h3>
+    <div id="bookingList"></div>
+    <div class="actions"><button class="ghost" id="resetDemo">ล้างข้อมูลตัวอย่างในเครื่องนี้</button></div>
+   </div>
+  </section>
+<div id="appShell" class="hidden">
+<main>
+ <div class="intro"><div><h1>เลือกที่นั่งของคุณ</h1><p>เลือกโต๊ะว่าง แล้วกรอกข้อมูลเพื่อบันทึกการจอง</p></div><div class="hint">ตัวอย่างต้นแบบ • 45 ที่นั่ง</div></div>
+ <div class="stats">
+  <div class="stat"><span>ที่นั่งทั้งหมด</span><strong>45</strong></div>
+  <div class="stat"><span>ที่นั่งว่าง</span><strong id="freeCount">45</strong></div>
+  <div class="stat"><span>จองแล้ว</span><strong id="busyCount">0</strong></div>
+ </div>
+ <section class="panel">
+  <div class="panelhead"><h2>แผนผังห้องเรียน</h2><div class="legend"><span class="key"><i class="dot free"></i>ว่าง</span><span class="key"><i class="dot busy"></i>จองแล้ว</span><span class="key"><i class="dot selected"></i>เลือกอยู่</span></div></div>
+  <div class="room">
+   <div class="front">
+    <div class="board">กระดานหน้าห้อง</div>
+    <div class="teacher">โต๊ะครู</div>
+   </div>
+   <div style="display:flex;gap:9px;min-width:560px">
+    <div class="door">ประตู</div>
+    <div class="seating" id="seating" style="flex:1"></div>
+    <div class="side-label">หน้าต่าง</div>
+   </div>
+   <div class="room-bottom"><div class="bin">ถังขยะ</div><div class="floor-note">ผังตัวอย่าง 45 ที่นั่ง • ตำแหน่งอุปกรณ์อ้างอิงจากภาพที่ให้มา</div></div>
+  </div>
+  <div class="notice" id="seatNotice">เลือกโต๊ะว่างเพื่อเริ่มจอง โต๊ะที่จองแล้วจะไม่สามารถเลือกซ้ำได้</div>
+ </section>
+ <div class="lower" style="margin-top:16px">
+  <section class="panel section">
+   <h2>รายละเอียดการจอง</h2>
+   <div class="formgrid">
+    <div class="field"><label for="studentName">ชื่อจริง</label><input id="studentName" maxlength="80" placeholder="กรอกชื่อจริง"></div>
+    <div class="field"><label for="sharedCode">รหัสกลาง</label><input id="sharedCode" type="password" placeholder="กรอกรหัสที่แอดมินตั้ง"></div>
+    <div class="field"><label for="startTime">วันและเวลาเริ่มต้น</label><input id="startTime" type="datetime-local"></div>
+    <div class="field"><label for="endTime">วันและเวลาสิ้นสุด</label><input id="endTime" type="datetime-local"></div>
+   </div>
+   <div class="actions"><button class="primary" id="bookBtn">ยืนยันการจอง</button><button class="ghost" id="cancelBtn">ยกเลิกการจองของฉัน</button></div>
+   <p class="hint">ตามกติกาที่ตกลงไว้ ที่นั่งหนึ่งมีผู้จองได้คนเดียวตลอดเทอม แม้ระบุช่วงเวลาไว้ ระบบจะบันทึกวันและเวลาที่เลือกเป็นรายละเอียดการจอง</p>
+  </section>
+
+ </div>
+ <footer>ClassSeat • ต้นแบบส่วนติดต่อผู้ใช้ ยังไม่เชื่อมฐานข้อมูลออนไลน์</footer>
+</main>
+</div>
+<script>
+const seatRoot=document.getElementById('seating');
+let selected=null, bookings=JSON.parse(localStorage.getItem('classseat_demo_bookings')||'{}');
+let sharedCode=localStorage.getItem('classseat_demo_code')||'1234', adminLogged=false;
+let studentLogged=false, studentName='';
+let accessWindow=JSON.parse(localStorage.getItem('classseat_access_window')||'{"start":"","end":""}');
+const seatEls={};
+for(let i=1;i<=45;i++){
+ const b=document.createElement('button'); b.className='seat'; b.type='button'; b.innerHTML=`<b>โต๊ะ ${i}</b><small>ว่าง</small>`; b.setAttribute('aria-label',`โต๊ะ ${i} ว่าง`);
+ b.addEventListener('click',()=>{if(bookings[i])return;selected=i;renderSeats();document.getElementById('seatNotice').textContent=`เลือกโต๊ะ ${i} แล้ว กรอกชื่อ รหัสกลาง และเวลาเพื่อจอง`;});
+ seatEls[i]=b;seatRoot.appendChild(b);
+}
+function renderSeats(){
+ let reserved=0;
+ for(let i=1;i<=45;i++){
+  const b=seatEls[i],r=bookings[i];b.className='seat'+(r?' reserved':'')+(!r&&selected===i?' chosen':'');b.disabled=!!r;
+  b.innerHTML=r?`<b>โต๊ะ ${i}</b><small>${escapeText(r.name)}</small>`:`<b>โต๊ะ ${i}</b><small>${selected===i?'เลือกอยู่':'ว่าง'}</small>`;
+  b.setAttribute('aria-label',r?`โต๊ะ ${i} จองแล้วโดย ${r.name}`:`โต๊ะ ${i} ว่าง`);
+  if(r)reserved++;
+ }
+ document.getElementById('busyCount').textContent=reserved;document.getElementById('freeCount').textContent=45-reserved;
+ if(adminLogged)renderAdminList();
+}
+function escapeText(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function persist(){localStorage.setItem('classseat_demo_bookings',JSON.stringify(bookings));renderSeats();}
+function accessAllowed(){const now=Date.now();if(!accessWindow.start||!accessWindow.end)return true;const a=new Date(accessWindow.start).getTime(),b=new Date(accessWindow.end).getTime();return Number.isFinite(a)&&Number.isFinite(b)&&b>a&&now>=a&&now<=b;}
+function refreshAccessUI(){
+ const allowed=accessAllowed();
+ const status=document.getElementById('loginStatus');
+ if(status)status.textContent=allowed?'ระบบเปิดรับการเข้าสู่ระบบ':(accessWindow.start&&Date.now()<new Date(accessWindow.start).getTime()?'ยังไม่ถึงเวลาเปิดระบบ':'หมดเวลาเข้าสู่ระบบแล้ว กรุณาติดต่อแอดมิน');
+ if(!studentLogged){document.getElementById('studentLoginScreen').classList.remove('hidden');document.getElementById('appShell').classList.add('hidden');}
+ const st=document.getElementById('accessWindowStatus');if(st)st.textContent=(!accessWindow.start||!accessWindow.end)?'ยังไม่ได้ตั้งช่วงเวลาเฉพาะ (เปิดให้ทดลองเข้าสู่ระบบ)':`เปิด: ${accessWindow.start.replace('T',' ')} • ปิด: ${accessWindow.end.replace('T',' ')}`;
+}
+document.getElementById('studentLoginBtn').onclick=()=>{
+ const name=document.getElementById('loginStudentName').value.trim(),code=document.getElementById('loginSharedCode').value;
+ if(!accessAllowed()){refreshAccessUI();alert('อยู่นอกช่วงเวลาที่อนุญาตให้เข้าสู่ระบบ');return;}
+ if(!name||!code){alert('กรุณากรอกชื่อจริงและรหัสกลาง');return;}
+ if(code!==sharedCode){alert('รหัสกลางไม่ถูกต้อง');return;}
+ studentLogged=true;studentName=name;document.getElementById('studentName').value=name;document.getElementById('sharedCode').value=code;
+ document.getElementById('studentLoginScreen').classList.add('hidden');document.getElementById('appShell').classList.remove('hidden');document.getElementById('seatNotice').textContent=`เข้าสู่ระบบแล้ว: ${escapeText(name)} เลือกโต๊ะว่างเพื่อจอง`;
+};
+document.getElementById('bookBtn').onclick=()=>{
+ if(!studentLogged){alert('กรุณาเข้าสู่ระบบก่อน');return;}
+
+ if(!selected){alert('กรุณาเลือกโต๊ะว่างก่อน');return}
+ const name=document.getElementById('studentName').value.trim(),code=document.getElementById('sharedCode').value;
+ const start=document.getElementById('startTime').value,end=document.getElementById('endTime').value;
+ if(!name||!code||!start||!end){alert('กรุณากรอกชื่อ รหัสกลาง และเวลาให้ครบ');return}
+ if(code!==sharedCode){alert('รหัสกลางไม่ถูกต้อง');return}
+ if(new Date(end)<=new Date(start)){alert('เวลาสิ้นสุดต้องอยู่หลังเวลาเริ่มต้น');return}
+ if(bookings[selected]){alert('โต๊ะนี้มีคนจองแล้ว');selected=null;renderSeats();return}
+ bookings[selected]={name,start,end,created:new Date().toISOString()};const n=selected;selected=null;persist();
+ document.getElementById('seatNotice').textContent=`บันทึกการจองโต๊ะ ${n} ในต้นแบบเครื่องนี้แล้ว`;
+ try{const ctx=new (window.AudioContext||window.webkitAudioContext)();const osc=ctx.createOscillator(),gain=ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.frequency.value=740;gain.gain.value=.08;osc.start();osc.stop(ctx.currentTime+.15);}catch(e){}
+ alert('จองโต๊ะสำเร็จในต้นแบบนี้');
+};
+document.getElementById('cancelBtn').onclick=()=>{
+ if(!studentLogged){alert('กรุณาเข้าสู่ระบบก่อน');return;}
+ const name=document.getElementById('studentName').value.trim(),code=document.getElementById('sharedCode').value;
+ if(!name||!code){alert('กรอกชื่อจริงและรหัสกลางก่อนยกเลิก');return}
+ const found=Object.keys(bookings).find(k=>bookings[k].name===name);
+ if(!found){alert('ไม่พบการจองของชื่อนี้ในเครื่องนี้');return}
+ if(code!==sharedCode){alert('รหัสกลางไม่ถูกต้อง');return}
+ if(!confirm(`ยืนยันยกเลิกโต๊ะ ${found} ของ ${name} หรือไม่?`))return;
+ delete bookings[found];persist();document.getElementById('seatNotice').textContent='ยกเลิกการจองแล้ว';alert('ยกเลิกการจองในต้นแบบแล้ว');
+};
+document.getElementById('adminToggle').onclick=()=>{document.getElementById('adminPanel').classList.toggle('show');document.getElementById('adminPanel').scrollIntoView({behavior:'smooth',block:'nearest'});};
+function adminLogin(){
+ const status=document.getElementById('adminLoginStatus');
+ if(status) status.textContent='กำลังตรวจสอบข้อมูล...';
+ const n=document.getElementById('adminName').value.trim();
+ const p=document.getElementById('adminPass').value;
+ // Demo-only credentials. Must be replaced with secure server-side auth before public deployment.
+ if(n.toLowerCase()==='admin'&&p==='admin123'){
+  adminLogged=true;
+  document.getElementById('adminLogin').style.display='none';
+  document.getElementById('adminTools').style.display='block';
+  renderAdminList();
+  if(status) status.textContent='เข้าสู่ระบบสำเร็จ';
+  document.getElementById('adminPanel').scrollIntoView({behavior:'smooth',block:'start'});
+  alert('เข้าสู่โหมดแอดมินตัวอย่างแล้ว');
+ } else {
+  if(status) status.textContent='ข้อมูลไม่ถูกต้อง: ใช้ชื่อ admin และรหัสผ่าน admin123';
+  alert('ข้อมูลไม่ถูกต้อง ให้กรอกชื่อ admin และรหัสผ่าน admin123 โดยไม่เว้นวรรค');
+ }
+}
+document.getElementById('loginBtn').addEventListener('click',adminLogin);
+document.getElementById('adminPass').addEventListener('keydown',e=>{if(e.key==='Enter')adminLogin();});
+document.getElementById('adminName').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('adminPass').focus();});
+document.getElementById('saveCode').onclick=()=>{const v=document.getElementById('newCode').value.trim();if(!v){alert('กรอกรหัสกลางใหม่');return}sharedCode=v;localStorage.setItem('classseat_demo_code',v);alert('เปลี่ยนรหัสกลางในเครื่องนี้แล้ว');document.getElementById('newCode').value='';};
+document.getElementById('saveAccessWindow').onclick=()=>{
+ const start=document.getElementById('accessStart').value,end=document.getElementById('accessEnd').value;
+ if(!start||!end){alert('กรุณาตั้งวันเวลาเปิดและปิดให้ครบ');return;}
+ if(new Date(end)<=new Date(start)){alert('วันเวลาปิดต้องอยู่หลังวันเวลาเปิด');return;}
+ accessWindow={start,end};localStorage.setItem('classseat_access_window',JSON.stringify(accessWindow));refreshAccessUI();alert('บันทึกช่วงเวลาอนุญาตเข้าสู่ระบบแล้ว');
+};
+document.getElementById('logoutBtn').onclick=()=>{adminLogged=false;document.getElementById('adminLogin').style.display='block';document.getElementById('adminTools').style.display='none';};
+// Session policy: logged-in students may finish after the access window ends; new logins are blocked.
+setInterval(()=>{refreshAccessUI();},15000);
+document.getElementById('resetDemo').onclick=()=>{if(confirm('ล้างการจองทั้งหมดในเครื่องนี้?')){bookings={};selected=null;persist();document.getElementById('seatNotice').textContent='ล้างข้อมูลตัวอย่างแล้ว';}};
+function renderAdminList(){
+ const root=document.getElementById('bookingList'),items=Object.entries(bookings);
+ if(!items.length){root.innerHTML='<div class="empty">ยังไม่มีการจอง</div>';return}
+ root.innerHTML='<div style="overflow-x:auto"><table class="bookings"><thead><tr><th>โต๊ะ</th><th>ชื่อ</th><th>เวลา</th><th></th></tr></thead><tbody>'+items.map(([id,r])=>`<tr><td>${id}</td><td>${escapeText(r.name)}</td><td>${escapeText(r.start.replace('T',' '))}<br>ถึง ${escapeText(r.end.replace('T',' '))}</td><td><button class="ghost" data-remove="${id}" style="padding:7px 9px">ยกเลิก</button></td></tr>`).join('')+'</tbody></table></div>';
+ root.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{const id=b.dataset.remove;if(confirm(`ยกเลิกโต๊ะ ${id}?`)){delete bookings[id];persist();}});
+}
+if(accessWindow.start)document.getElementById('accessStart').value=accessWindow.start;if(accessWindow.end)document.getElementById('accessEnd').value=accessWindow.end;
+renderSeats();refreshAccessUI();
+</script>
+</body>
+</html>
